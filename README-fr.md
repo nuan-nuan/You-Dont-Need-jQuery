@@ -1,22 +1,23 @@
-## You Don't Need jQuery [![Build Status](https://travis-ci.org/oneuijs/You-Dont-Need-jQuery.svg)](https://travis-ci.org/oneuijs/You-Dont-Need-jQuery)
+## Vous n'avez pas besoin de jQuery [![Build Status](https://travis-ci.org/oneuijs/You-Dont-Need-jQuery.svg)](https://travis-ci.org/oneuijs/You-Dont-Need-jQuery)
 
-Frontend environments evolve rapidly nowadays, modern browsers have already implemented a great deal of DOM/BOM APIs which are good enough. We don't have to learn jQuery from scratch for DOM manipulation or events. In the meantime, thanks to the prevailment of frontend libraries such as React, Angular and Vue, manipulating DOM directly becomes anti-pattern, jQuery has never been less important. This project summarizes most of the jQuery method alternatives in native implementation, with IE 10+ support.
 
-## Table of Contents
+De nos jours, les environnements frontend évolus si rapidement que les navigateurs récents ont déjà implémentés beaucoup d'API DOM/BOM suffisants. Il n'est pas utile d'apprendre jQuery à partir de rien pour manipuler le DOM ou les évènements. Pendant ce temps, grâce à l'efficacité de bibliothèques frontend comme React, Angular et Vue, manipuler directement le DOM est devenu obsolète, jQuery n'a jamais été aussi peu important. Ce projet résume la plupart des alternatives à jQuery à l'aide d'implémentations natives, compatibles IE 10+.
 
-1. [Translations](#translations)
-1. [Query Selector](#query-selector)
-1. [CSS & Style](#css--style)
-1. [DOM Manipulation](#dom-manipulation)
+## Sommaire
+
+1. [Traductions](#traductions)
+1. [Sélecteur jQuery](#sélecteur-jquery)
+1. [Style et CSS](#style--css)
+1. [Manipulation du DOM](#manipulation-du-dom)
 1. [Ajax](#ajax)
-1. [Events](#events)
-1. [Utilities](#utilities)
-1. [Promises](#promises)
+1. [Évènements](#évènements)
+1. [Utilitaires](#utilitaires)
+1. [Promesses](#promesses)
 1. [Animation](#animation)
 1. [Alternatives](#alternatives)
-1. [Browser Support](#browser-support)
+1. [Navigateurs compatibles](#navigateurs-compatibles)
 
-## Translations
+## Traductions
 
 * [한국어](./README.ko-KR.md)
 * [简体中文](./README.zh-CN.md)
@@ -30,117 +31,114 @@ Frontend environments evolve rapidly nowadays, modern browsers have already impl
 * [Italiano](./README-it.md)
 * [Français](./README-fr.md)
 
-## Query Selector
+## Sélecteur jQuery
 
-In place of common selectors like class, id or attribute we can use `document.querySelector` or `document.querySelectorAll` for substitution. The differences lie in:
-* `document.querySelector` returns the first matched element
-* `document.querySelectorAll` returns all matched elements as NodeList. It can be converted to Array using `[].slice.call(document.querySelectorAll(selector) || []);`
-* If no elements matched, jQuery would return `[]` whereas the DOM API will return `null`. Pay attention to Null Pointer Exception. You can also use `||` to set default value if not found, like `document.querySelectorAll(selector) || []`
+À la place des sélecteurs communs comme class, id ou attribute il est possible d'utiliser `document.querySelector` ou `document.querySelectorAll` à la place. Les différences consistent en:
+* `document.querySelector` retourne le premier élément trouvé
+* `document.querySelectorAll` retourne tous les éléments trouvés sous forme d'une NodeList. Il est possible de le convertir en Array à l'aide de `[].slice.call(document.querySelectorAll(selector) || []);`
+* Si aucun élément n'a été trouvé, jQuery peut retourner `[]` alors que l'API DOM va retourner `null`. Faite attention au Null Pointer Exception. Vous pouvez aussi utiliser `||` pour définir la valeur par défaut si rien n'a été trouvé, comme `document.querySelectorAll(selector) || []`
 
-> Notice: `document.querySelector` and `document.querySelectorAll` are quite **SLOW**, try to use `getElementById`, `document.getElementsByClassName` or `document.getElementsByTagName` if you want to get a performance bonus.
+> Remarque: `document.querySelector` et `document.querySelectorAll` sont assez **LENT**, essayez plutôt d'utiliser `getElementById`, `document.getElementsByClassName` ou `document.getElementsByTagName` si vous souhaitez obtenir un gain de performance.
 
-- [1.0](#1.0) <a name='1.0'></a> Query by selector
+- [1.0](#1.0) <a name='1.0'></a> Requête par sélecteur
 
   ```js
   // jQuery
   $('selector');
 
-  // Native
+  // Natif
   document.querySelectorAll('selector');
   ```
 
-- [1.1](#1.1) <a name='1.1'></a> Query by class
+- [1.1](#1.1) <a name='1.1'></a> Requête par classe
 
   ```js
   // jQuery
   $('.class');
 
-  // Native
+  // Natif
   document.querySelectorAll('.class');
 
-  // or
+  // ou
   document.getElementsByClassName('class');
   ```
 
-- [1.2](#1.2) <a name='1.2'></a> Query by id
+- [1.2](#1.2) <a name='1.2'></a> Requête par id
 
   ```js
   // jQuery
   $('#id');
 
-  // Native
+  // Natif
   document.querySelector('#id');
 
-  // or
+  // ou
   document.getElementById('id');
   ```
 
-- [1.3](#1.3) <a name='1.3'></a> Query by attribute
+- [1.3](#1.3) <a name='1.3'></a> Requête par attribut
 
   ```js
   // jQuery
   $('a[target=_blank]');
 
-  // Native
+  // Natif
   document.querySelectorAll('a[target=_blank]');
   ```
-
-- [1.4](#1.4) <a name='1.4'></a> Query in descendents
+- [1.4](#1.4) <a name='1.4'></a> Requête par descendants
 
   ```js
   // jQuery
   $el.find('li');
 
-  // Native
+  // Natif
   el.querySelectorAll('li');
   ```
+- [1.5](#1.5) <a name='1.5'></a> Éléments voisins/précédents/suivants
 
-- [1.5](#1.5) <a name='1.5'></a> Sibling/Previous/Next Elements
-
-  + Sibling elements
+  + Éléments voisins
 
     ```js
     // jQuery
     $el.siblings();
 
-    // Native
+    // Natif
     [].filter.call(el.parentNode.children, function(child) {
       return child !== el;
     });
     ```
 
-  + Previous elements
+  + Éléments précédents
 
     ```js
     // jQuery
     $el.prev();
 
-    // Native
+    // Natif
     el.previousElementSibling;
+
     ```
 
-  + Next elements
+  + Éléments suivants
 
     ```js
-    // jQuery
+    // next
     $el.next();
-
-    // Native
     el.nextElementSibling;
     ```
 
-- [1.6](#1.6) <a name='1.6'></a> Closest
+- [1.6](#1.6) <a name='1.6'></a> Plus proche
 
-  Return the first matched element by provided selector, traversing from current element to document.
+  Retourne le premier élément trouver à l'aide du sélecteur fourni, parcourant l'élément actuel vers le document.
 
   ```js
   // jQuery
-  $el.closest(selector);
-
-  // Native - Only latest, NO IE
+  $el.closest(queryString);
+  
+  // Natif - Seulement le dernier, ne fonctionne pas sous IE
   el.closest(selector);
 
-  // Native - IE10+
+  // Natif - IE10+
   function closest(el, selector) {
     const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
 
@@ -155,20 +153,20 @@ In place of common selectors like class, id or attribute we can use `document.qu
   }
   ```
 
-- [1.7](#1.7) <a name='1.7'></a> Parents Until
+- [1.7](#1.7) <a name='1.7'></a> Parents jusqu'à
 
-  Get the ancestors of each element in the current set of matched elements, up to but not including the element matched by the selector, DOM node, or jQuery object.
+  Retourne les ancêtres de chaque élément dans l'ensemble d'éléments trouvés courants, jusqu'à (sans l'inclure) l'élément correspondant au sélecteur, le noeud DOM ou l'objet JQuery.
 
   ```js
   // jQuery
   $el.parentsUntil(selector, filter);
 
-  // Native
+  // Natif
   function parentsUntil(el, selector, filter) {
     const result = [];
     const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
 
-    // match start from parent
+    // la correspondance commence à partir du parent
     el = el.parentElement;
     while (el && !matchesSelector.call(el, selector)) {
       if (!filter) {
@@ -184,7 +182,7 @@ In place of common selectors like class, id or attribute we can use `document.qu
   }
   ```
 
-- [1.8](#1.8) <a name='1.8'></a> Form
+- [1.8](#1.8) <a name='1.8'></a> Formulaire
 
   + Input/Textarea
 
@@ -192,193 +190,150 @@ In place of common selectors like class, id or attribute we can use `document.qu
     // jQuery
     $('#my-input').val();
 
-    // Native
+    // Natif
     document.querySelector('#my-input').value;
     ```
 
-  + Get index of e.currentTarget between `.radio`
+  + Obtenir l'index du e.currentTarget entre `.radio`
 
     ```js
     // jQuery
     $(e.currentTarget).index('.radio');
 
-    // Native
+    // Natif
     [].indexOf.call(document.querySelectorAll('.radio'), e.currentTarget);
     ```
 
-- [1.9](#1.9) <a name='1.9'></a> Iframe Contents
+- [1.9](#1.9) <a name='1.9'></a> Contenus Iframe
 
-  `$('iframe').contents()` returns `contentDocument` for this specific iframe
+  `$('iframe').contents()` retourne `contentDocument` pour cet iframe en particulier
 
-  + Iframe contents
+  + Contenus de l'Iframe
 
     ```js
     // jQuery
     $iframe.contents();
 
-    // Native
+    // Natif
     iframe.contentDocument;
     ```
 
-  + Iframe Query
+  + Requête Iframe
 
     ```js
     // jQuery
     $iframe.contents().find('.css');
 
-    // Native
+    // Natif
     iframe.contentDocument.querySelectorAll('.css');
     ```
 
-- [1.10](#1.10) <a name='1.10'></a> Get body
+**[⬆ remonter](#table-of-contents)**
 
-  ```js
-  // jQuery
-  $('body');
-
-  // Native
-  document.body;
-  ```
-
-- [1.11](#1.11) <a name='1.11'></a> Attribute getter and setter
-
-  + Get an attribute
-
-    ```js
-    // jQuery
-    $el.attr('foo');
-
-    // Native
-    el.getAttribute('foo');
-    ```
-  + Set an attribute
-
-    ```js
-    // jQuery, note that this works in memory without change the DOM
-    $el.attr('foo', 'bar');
-
-    // Native
-    el.setAttribute('foo', 'bar');
-    ```
-
-  + Get a `data-` attribute
-
-    ```js
-    // jQuery
-    $el.data('foo');
-
-    // Native (use `getAttribute`)
-    el.getAttribute('data-foo');
-    // Native (use `dataset` if only need to support IE 11+)
-    el.dataset['foo'];
-    ```
-
-**[⬆ back to top](#table-of-contents)**
-
-## CSS & Style
+## Style & CSS
 
 - [2.1](#2.1) <a name='2.1'></a> CSS
 
-  + Get style
+  + Obtenir le style
 
     ```js
     // jQuery
     $el.css("color");
 
-    // Native
-    // NOTE: Known bug, will return 'auto' if style value is 'auto'
+    // Natif
+    // NOTE: Bug connu, retournera 'auto" si la valeur du site est 'auto'
     const win = el.ownerDocument.defaultView;
-    // null means not return pseudo styles
+    // null signifie ne pas retourner les pseudo styles
     win.getComputedStyle(el, null).color;
     ```
 
-  + Set style
+  + Définir le style
 
     ```js
     // jQuery
     $el.css({ color: "#ff0011" });
 
-    // Native
+    // Natif
     el.style.color = '#ff0011';
     ```
 
-  + Get/Set Styles
+  + Obtenir/Définir les styles
 
-    Note that if you want to set multiple styles once, you could refer to [setStyles](https://github.com/oneuijs/oui-dom-utils/blob/master/src/index.js#L194) method in oui-dom-utils package.
+    Notez que si vous souhaitez définir plusieurs styles à la fois, you devriez vous référer à la méthode [setStyles](https://github.com/oneuijs/oui-dom-utils/blob/master/src/index.js#L194) du paquet oui-dom-utils.
 
 
-  + Add class
+  + Ajouter une classe
 
     ```js
     // jQuery
     $el.addClass(className);
 
-    // Native
+    // Natif
     el.classList.add(className);
     ```
 
-  + Remove class
+  + Supprimer une classe
 
     ```js
     // jQuery
     $el.removeClass(className);
 
-    // Native
+    // Natif
     el.classList.remove(className);
     ```
 
-  + has class
+  + Possède une classe
 
     ```js
     // jQuery
     $el.hasClass(className);
 
-    // Native
+    // Natif
     el.classList.contains(className);
     ```
 
-  + Toggle class
+  + Basculer une class
 
     ```js
     // jQuery
     $el.toggleClass(className);
 
-    // Native
+    // Natif
     el.classList.toggle(className);
     ```
 
-- [2.2](#2.2) <a name='2.2'></a> Width & Height
+- [2.2](#2.2) <a name='2.2'></a> Largeur et Hauteur
 
-  Width and Height are theoretically identical, take Height as example:
+  Travailler avec la hauteur ou la largeur est en théorie identique, prenons la hauteur pour exemple:
 
-  + Window height
+  + Hauteur de la fenêtre
 
     ```js
-    // window height
+    // hauteur de la fenêtre
     $(window).height();
-    // without scrollbar, behaves like jQuery
+    // se comporte comme jQuery sans ascenseur
     window.document.documentElement.clientHeight;
-    // with scrollbar
+    // avec ascenseur
     window.innerHeight;
     ```
 
-  + Document height
+  + Hauteur du document
 
     ```js
     // jQuery
     $(document).height();
 
-    // Native
+    // Natif
     document.documentElement.scrollHeight;
     ```
 
-  + Element height
+  + Hauteur de l'élement
 
     ```js
     // jQuery
     $el.height();
 
-    // Native
+    // NatiF
     function getHeight(el) {
       const styles = window.getComputedStyle(el);
       const height = el.offsetHeight;
@@ -388,35 +343,35 @@ In place of common selectors like class, id or attribute we can use `document.qu
       const paddingBottom = parseFloat(styles.paddingBottom);
       return height - borderBottomWidth - borderTopWidth - paddingTop - paddingBottom;
     }
-    // accurate to integer（when `border-box`, it's `height`; when `content-box`, it's `height + padding + border`）
+    // précis à l'entier près (quand `border-box`, son `height`; quand `content-box`, son `height + padding + border`)
     el.clientHeight;
-    // accurate to decimal（when `border-box`, it's `height`; when `content-box`, it's `height + padding + border`）
+    // précis à la décimale près (quand `border-box`, son `height`; quand `content-box`, son `height + padding + border`)
     el.getBoundingClientRect().height;
     ```
 
-- [2.3](#2.3) <a name='2.3'></a> Position & Offset
+- [2.3](#2.3) <a name='2.3'></a> Position et offset
 
   + Position
-
-    Get the current coordinates of the element relative to the offset parent.
+    
+    Récupère les coordonnées courantes de l'élement relatif à l'offset parent.
 
     ```js
     // jQuery
     $el.position();
 
-    // Native
+    // Natif
     { left: el.offsetLeft, top: el.offsetTop }
     ```
 
   + Offset
-
-    Get the current coordinates of the element relative to the document.
+    
+    Récupère les coordonnées courantes de l'élement relatif au document.
 
     ```js
     // jQuery
     $el.offset();
 
-    // Native
+    // Natif
     function getOffset (el) {
       const box = el.getBoundingClientRect();
 
@@ -427,176 +382,188 @@ In place of common selectors like class, id or attribute we can use `document.qu
     }
     ```
 
-- [2.4](#2.4) <a name='2.4'></a> Scroll Top
-
-  Get the current vertical position of the scroll bar for the element.
+- [2.4](#2.4) <a name='2.4'></a> Défiler vers le haut
+  
+  Récupère la position verticale courante de l'ascenseur pour cet élément.
 
   ```js
   // jQuery
   $(window).scrollTop();
 
-  // Native
+  // Natif
   (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
   ```
 
-**[⬆ back to top](#table-of-contents)**
+**[⬆ remonter](#table-of-contents)**
 
-## DOM Manipulation
+## Manipulation du DOM
 
-- [3.1](#3.1) <a name='3.1'></a> Remove
-
-  Remove the element from the DOM.
-
+- [3.1](#3.1) <a name='3.1'></a> Supprimer
+  
+  Supprime l'élément du DOM.
+  
   ```js
   // jQuery
   $el.remove();
 
-  // Native
+  // Natif
   el.parentNode.removeChild(el);
   ```
 
-- [3.2](#3.2) <a name='3.2'></a> Text
+- [3.2](#3.2) <a name='3.2'></a> Texte
 
-  + Get text
-
-    Get the combined text contents of the element including their descendants,
+  + Obtenir le texte
+    
+    Récupère le contenu textuel combiné de l'élément en incluant ses déscendants.
 
     ```js
     // jQuery
     $el.text();
 
-    // Native
+    // Natif
     el.textContent;
     ```
 
-  + Set text
-
-    Set the content of the element to the specified text.
+  + Définir le text
+    
+    Défini le contenu de l'élément à partir du texte spécifié.
 
     ```js
     // jQuery
     $el.text(string);
 
-    // Native
+    // Natif
     el.textContent = string;
     ```
 
 - [3.3](#3.3) <a name='3.3'></a> HTML
 
-  + Get HTML
+  + Obtenir l'HTML
 
     ```js
     // jQuery
     $el.html();
 
-    // Native
+    // Natif
     el.innerHTML;
     ```
 
-  + Set HTML
+  + Définir l'HTML
 
     ```js
     // jQuery
     $el.html(htmlString);
 
-    // Native
+    // Natif
     el.innerHTML = htmlString;
     ```
 
-- [3.4](#3.4) <a name='3.4'></a> Append
+- [3.4](#3.4) <a name='3.4'></a> Ajouter
 
-  Append child element after the last child of parent element
+  Ajouter un élément enfant après le dernier enfant de l'élément parent.
 
   ```js
   // jQuery
   $el.append("<div id='container'>hello</div>");
 
-  // Native
-  el.insertAdjacentHTML("beforeend","<div id='container'>hello</div>");
+  // Natif
+  let newEl = document.createElement('div');
+  newEl.setAttribute('id', 'container');
+  newEl.innerHTML = 'hello';
+  el.appendChild(newEl);
   ```
 
-- [3.5](#3.5) <a name='3.5'></a> Prepend
+- [3.5](#3.5) <a name='3.5'></a> Faire précéder
 
   ```js
   // jQuery
   $el.prepend("<div id='container'>hello</div>");
 
-  // Native
-  el.insertAdjacentHTML("afterbegin","<div id='container'>hello</div>");
+  // Natif
+  let newEl = document.createElement('div');
+  newEl.setAttribute('id', 'container');
+  newEl.innerHTML = 'hello';
+  el.insertBefore(newEl, el.firstChild);
   ```
 
-- [3.6](#3.6) <a name='3.6'></a> insertBefore
+- [3.6](#3.6) <a name='3.6'></a> Insérer avant
 
-  Insert a new node before the selected elements
+  Insérer un nouveau noeud avant les éléments sélectionnés.
 
   ```js
   // jQuery
   $newEl.insertBefore(queryString);
 
-  // Native
-  const target = document.querySelector(queryString);
-  target.parentNode.insertBefore(newEl, target);
+  // Natif
+  newEl.insertBefore(document.querySelector(queryString));
   ```
 
-- [3.7](#3.7) <a name='3.7'></a> insertAfter
+- [3.7](#3.7) <a name='3.7'></a> Insérer après
 
-  Insert a new node after the selected elements
+  Insérer un nouveau noeud après les noeufs sélectionnés
 
   ```js
   // jQuery
   $newEl.insertAfter(queryString);
 
-  // Native
-  const target = document.querySelector(queryString);
-  target.parentNode.insertBefore(newEl, target.nextSibling);
+  // Natif
+  function insertAfter(newEl, queryString) {
+    const parent = document.querySelector(queryString).parentNode;
+
+    if (parent.lastChild === newEl) {
+      parent.appendChild(newEl);
+    } else {
+      parent.insertBefore(newEl, parent.nextSibling);
+    }
+  },
   ```
+- [3.8](#3.8) <a name='3.8'></a> est
 
-- [3.8](#3.8) <a name='3.8'></a> is
-
-  Return `true` if it matches the query selector
+  Retourne `true` le paramètre correspond à la requête de sélection
 
   ```js
-  // jQuery - Notice `is` also work with `function` or `elements` which is not concerned here
+  // jQuert - Noter que `is` fonctionne également avec `function` ou `elements` qui ne sont pas concernés ici
   $el.is(selector);
 
-  // Native
+  // Natif
   el.matches(selector);
   ```
+
 - [3.9](#3.9) <a name='3.9'></a> clone
 
-  Create a deep copy of that element
+  Créé une copie profonde de cet élément
 
   ```js
   // jQuery
   $el.clone();
 
-  // Native
+  // Natif
   el.cloneNode();
 
-  // For Deep clone , set param as `true`
+  // Pour une copie profonde, définir le paramètre à `true`
   ```
 
-- [3.10](#3.10) <a name='3.10'></a> empty
+- [3.10](#3.10) <a name='3.10'></a> vider
 
-  Remove all child nodes
+  Supprime tous les noeuds enfants
 
   ```js
   // jQuery
   $el.empty();
 
-  // Native
+  // Natif
   el.innerHTML = '';
   ```
 
-- [3.11](#3.11) <a name='3.11'></a> wrap
+- [3.11](#3.11) <a name='3.11'></a> enrouler
 
-  Wrap an HTML structure around each element
+  Enrouler une structure HTML autour de chaque élément
 
   ```js
   // jQuery
   $('.inner').wrap('<div class="wrapper"></div>');
 
-  // Native
+  // Natif
   [].slice.call(document.querySelectorAll('.inner')).forEach(function(el){
     var wrapper = document.createElement('div');
     wrapper.className = 'wrapper';
@@ -606,15 +573,15 @@ In place of common selectors like class, id or attribute we can use `document.qu
   });
   ```
 
-- [3.12](#3.12) <a name='3.12'></a> unwrap
+- [3.12](#3.12) <a name='3.12'></a> dérouler
 
-  Remove the parents of the set of matched elements from the DOM
+  Supprime les parents de la collection des éléments correspondants du DOM
 
   ```js
   // jQuery
   $('.inner').unwrap();
 
-  // Native
+  // Natif
   [].slice.call(document.querySelectorAll('.inner')).forEach(function(el){
     [].slice.call(el.childNodes).forEach(function(child){
       el.parentNode.insertBefore(child, el);
@@ -622,78 +589,37 @@ In place of common selectors like class, id or attribute we can use `document.qu
     el.parentNode.removeChild(el);
   });
   ```
-
-- [3.13](#3.13) <a name='3.13'></a> replaceWith
-
-  Replace each element in the set of matched elements with the provided new content
-
-  ```js
-  // jQuery
-  $('.inner').replaceWith('<div class="outer"></div>');
-
-  // Native
-  [].slice.call(document.querySelectorAll('.inner')).forEach(function(el){
-    var outer = document.createElement('div');
-    outer.className = 'outer';
-    el.parentNode.insertBefore(outer, el);
-    el.parentNode.removeChild(el);
-  });
-  ```
-
-
-**[⬆ back to top](#table-of-contents)**
+**[⬆ remonter](#table-of-contents)**
 
 ## Ajax
 
-[Fetch API](https://fetch.spec.whatwg.org/) is the new standard to replace XMLHttpRequest to do ajax. It works on Chrome and Firefox, you can use polyfills to make it work on legacy browsers.
+[Fetch API](https://fetch.spec.whatwg.org/) est le nouveau standard qui a pour but de remplacer XMLHttpRequest afin de faire de l'ajax. Il fonctionne sous Chrome et Firefox, il est possible d'utiliser polyfills pour le faire fonctionner sur de vieux navigateurs.
 
-Try [github/fetch](http://github.com/github/fetch) on IE9+ or [fetch-ie8](https://github.com/camsong/fetch-ie8/) on IE8+, [fetch-jsonp](https://github.com/camsong/fetch-jsonp) to make JSONP requests.
+Essayer [github/fetch](http://github.com/github/fetch) sous IE9+ ou [fetch-ie8](https://github.com/camsong/fetch-ie8/) sous IE8+, [fetch-jsonp](https://github.com/camsong/fetch-jsonp) pour construire des requêtes JSONP.
 
-- [4.1](#4.1) <a name='4.1'></a> Load data from the server and place the returned HTML into the matched element.
+**[⬆ remonter](#table-of-contents)**
 
-  ```js
-  // jQuery
-  $(selector).load(url, completeCallback)
-  
-  // Native
-  fetch(url).then(data => data.text()).then(data => {
-    document.querySelector(selector).innerHTML = data
-  }).then(completeCallback)
-  ```
+## Évènements
 
-**[⬆ back to top](#table-of-contents)**
+Pour remplacer complètement jusqu'aux espaces de nom et délégations, se référer à https://github.com/oneuijs/oui-dom-events
 
-## Events
-
-For a complete replacement with namespace and delegation, refer to https://github.com/oneuijs/oui-dom-events
-
-- [5.0](#5.0) <a name='5.0'></a> Document ready by `DOMContentLoaded`
-
-  ```js
-  // jQuery
-  $(document).ready(eventHandler);
-
-  // Native
-  document.addEventListener("DOMContentLoaded", eventHandler);
-  ```
-
-- [5.1](#5.1) <a name='5.1'></a> Bind an event with on
+- [5.1](#5.1) <a name='5.1'></a> Attacher un événement avec `on`
 
   ```js
   // jQuery
   $el.on(eventName, eventHandler);
 
-  // Native
+  // Natif
   el.addEventListener(eventName, eventHandler);
   ```
 
-- [5.2](#5.2) <a name='5.2'></a> Unbind an event with off
+- [5.2](#5.2) <a name='5.2'></a> Détacher un événement avec `off`
 
   ```js
   // jQuery
   $el.off(eventName, eventHandler);
 
-  // Native
+  // Natif
   el.removeEventListener(eventName, eventHandler);
   ```
 
@@ -703,7 +629,7 @@ For a complete replacement with namespace and delegation, refer to https://githu
   // jQuery
   $(el).trigger('custom-event', {key1: 'data'});
 
-  // Native
+  // Natif
   if (window.CustomEvent) {
     const event = new CustomEvent('custom-event', {detail: {key1: 'data'}});
   } else {
@@ -714,29 +640,29 @@ For a complete replacement with namespace and delegation, refer to https://githu
   el.dispatchEvent(event);
   ```
 
-**[⬆ back to top](#table-of-contents)**
+**[⬆ remonter](#table-of-contents)**
 
-## Utilities
+## Utilitaires
 
-Most of utilities are found by native API. Others advanced functions could be choosed better utilities library focus on consistency and performance. Recommend [lodash](https://lodash.com) to replace.
+La plupart des utilitaires se trouvent dans l'API native. D'autres fonctions avancées peuvent être choisiesafin de se concentrer sur la cohérence et la performance. Il est recommandé de remplacer par [lodash](https://lodash.com).
 
-- [6.1](#6.1) <a name='6.1'></a> Basic utilities
+- [6.1](#6.1) <a name='6.1'></a> Utilitaires basiques
 
   + isArray
 
-  Determine whether the argument is an array.
+  Détermine si l'argument est un tableau.
 
   ```js
   // jQuery
-  $.isArray(array);
+  $.isArray(range);
 
-  // Native
-  Array.isArray(array);
+  // Natif
+  Array.isArray(range);
   ```
-
+ 
   + isWindow
 
-  Determine whether the argument is a window.
+  Détermine si l'argument est une fenêtre.
 
   ```js
   // jQuery
@@ -750,54 +676,54 @@ Most of utilities are found by native API. Others advanced functions could be ch
 
   + inArray
 
-  Search for a specified value within an array and return its index (or -1 if not found).
+  Recherche une valeur spécifique à l'intérieur d'un tableau et retourne son index (ou -1 si rien n'a été trouvé).
 
   ```js
   // jQuery
   $.inArray(item, array);
 
-  // Native
+  // Natif
   Array.indexOf(item);
   ```
-
+  
   + isNumeric
 
-  Determines whether its argument is a number.
-  Use `typeof` to decide type. if necessary to use library, sometimes `typeof` isn't accurate.
+  Détermine si l'argument est un nombre.
+  Utiliser `typeof` pour décider du type. Si nécessaire utiliser une bibliothèque, parfois `typeof` n'est pas exacte.
 
   ```js
   // jQuery
   $.isNumeric(item);
 
-  // Native
+  // Natif
   function isNumeric(item) {
-    return typeof item === 'number';
+    return typeof value === 'number';
   }
   ```
 
   + isFunction
 
-  Determine if the argument passed is a JavaScript function object.
+  Détermine si l'argument est un objet fonction JavaScript.
 
   ```js
   // jQuery
   $.isFunction(item);
 
-  // Native
+  // Natif
   function isFunction(item) {
-    return typeof item === 'function';
+    return typeof value === 'function';
   }
   ```
-
+  
   + isEmptyObject
 
-  Check to see if an object is empty (contains no enumerable properties).
+  Vérifie si un objet est vide (ne contiens aucunes propriétés énumérables).
 
   ```js
   // jQuery
   $.isEmptyObject(obj);
 
-  // Native
+  // Natif
   function isEmptyObject(obj) {
     for (let key in obj) {
       return false;
@@ -808,13 +734,13 @@ Most of utilities are found by native API. Others advanced functions could be ch
 
   + isPlainObject
 
-  Check to see if an object is a plain object (created using “{}” or “new Object”).
+  Vérifie si un object est un objet "plat" (créé en utilisant "{}" ou "new Object").
 
   ```js
   // jQuery
   $.isPlainObject(obj);
 
-  // Native
+  // Natif
   function isPlainObject(obj) {
     if (typeof (obj) !== 'object' || obj.nodeType || obj != null && obj === obj.window) {
       return false;
@@ -831,92 +757,92 @@ Most of utilities are found by native API. Others advanced functions could be ch
 
   + extend
 
-  Merge the contents of two or more objects together into the first object.
-  object.assign is ES6 API, and you could use [polyfill](https://github.com/ljharb/object.assign) also.
+  Fusionne le contenu de deux objets ou plus ensembles en un seul objet.
+  object.assign fait parti de l'API ES6, il est également possible d'utiliser [polyfill](https://github.com/ljharb/object.assign).
 
   ```js
   // jQuery
   $.extend({}, defaultOpts, opts);
 
-  // Native
+  // Natif
   Object.assign({}, defaultOpts, opts);
   ```
 
   + trim
-
-  Remove the whitespace from the beginning and end of a string.
+  
+  Supprime le whitespace au début et à la fin d'une chaine.
 
   ```js
   // jQuery
   $.trim(string);
 
-  // Native
+  // Natif
   string.trim();
   ```
 
   + map
 
-  Translate all items in an array or object to new array of items.
+  Traduit tous les éléments d'un tableau ou d'un objet vers un nouveau tableau d'éléments.
 
   ```js
   // jQuery
   $.map(array, function(value, index) {
   });
 
-  // Native
+  // Natif
   array.map(function(value, index) {
   });
   ```
 
   + each
 
-  A generic iterator function, which can be used to seamlessly iterate over both objects and arrays.
+  Une fonction générique d'itération, qui peut être utilisée pour itérer de façon transparente à travers des objets et des tableaux.
 
   ```js
   // jQuery
   $.each(array, function(value, index) {
   });
 
-  // Native
+  // Natif
   array.forEach(function(value, index) {
   });
   ```
-
+  
   + grep
 
-  Finds the elements of an array which satisfy a filter function.
+  Trouve les éléments d'un tableau qui satisfont avec une fonction filtre.
 
   ```js
   // jQuery
   $.grep(array, function(value, index) {
   });
 
-  // Native
+  // Natif
   array.filter(function(value, index) {
   });
   ```
-
+  
   + type
 
-  Determine the internal JavaScript [[Class]] of an object.
+  Détermine la [[Class]] interne JavaScript d'un objet.
 
   ```js
   // jQuery
   $.type(obj);
 
-  // Native
+  // Natif
   Object.prototype.toString.call(obj).replace(/^\[object (.+)\]$/, '$1').toLowerCase();
   ```
-
+  
   + merge
 
-  Merge the contents of two arrays together into the first array.
+  Fusionne le contenu de deux tableau ensembles dans un seul tableau.
 
   ```js
   // jQuery
   $.merge(array1, array2);
 
-  // Native
+  // Natif
   // But concat function don't remove duplicate items.
   function merge() {
     return Array.prototype.concat.apply([], arguments)
@@ -925,64 +851,61 @@ Most of utilities are found by native API. Others advanced functions could be ch
 
   + now
 
-  Return a number representing the current time.
+  Retourne un nombre représentant l'heure actuelle.
 
   ```js
   // jQuery
   $.now();
 
-  // Native
+  // Natif
   Date.now();
   ```
 
   + proxy
 
-  Takes a function and returns a new one that will always have a particular context.
+  Prend une fonction et en retourne une nouvelle qui aura toujours un contexte particulier.
 
   ```js
   // jQuery
   $.proxy(fn, context);
 
-  // Native
+  // Natif
   fn.bind(context);
   ```
 
   + makeArray
 
-  Convert an array-like object into a true JavaScript array.
+  Convertie un objet "array-like" vers un véritable tableau JavaScript.
 
   ```js
   // jQuery
-  $.makeArray(arrayLike);
+  $.makeArray(array);
 
-  // Native
-  [].slice.call(arrayLike);
-  
-  // ES6-way
-  Array.from(arrayLike);
+  // Natif
+  [].slice.call(array);
   ```
 
-- [6.2](#6.2) <a name='6.2'></a> Contains
-
-  Check to see if a DOM element is a descendant of another DOM element.
+- [6.2](#6.2) <a name='6.2'></a> Contient
+  
+  Vérifie si un élément du DOM est un déscendant d'un autre élément du DOM.
 
   ```js
   // jQuery
   $.contains(el, child);
 
-  // Native
+  // Natif
   el !== child && el.contains(child);
   ```
 
 - [6.3](#6.3) <a name='6.3'></a> Globaleval
 
-  Execute some JavaScript code globally.
+  Exécute du code JavaScript de manière globale.
 
   ```js
   // jQuery
   $.globaleval(code);
 
-  // Native
+  // Natif
   function Globaleval(code) {
     let script = document.createElement('script');
     script.text = code;
@@ -990,7 +913,7 @@ Most of utilities are found by native API. Others advanced functions could be ch
     document.head.appendChild(script).parentNode.removeChild(script);
   }
 
-  // Use eval, but context of eval is current, context of $.Globaleval is global.
+  // Utilise eval, mais le contexte d'eval est l'actuel alors que le contexte de $.Globaleval est global.
   eval(code);
   ```
 
@@ -998,13 +921,13 @@ Most of utilities are found by native API. Others advanced functions could be ch
 
   + parseHTML
 
-  Parses a string into an array of DOM nodes.
+  Parse une chaine vers u tableau de noeuds DOM.
 
   ```js
   // jQuery
   $.parseHTML(htmlString);
 
-  // Native
+  // Natif
   function parseHTML(string) {
     const tmp = document.implementation.createHTMLDocument();
     tmp.body.innerHTML = string;
@@ -1014,49 +937,50 @@ Most of utilities are found by native API. Others advanced functions could be ch
 
   + parseJSON
 
-  Takes a well-formed JSON string and returns the resulting JavaScript value.
+  Prend une chaine JSON correctement formatée et retourne la valeur JavaScript résultante.
 
   ```js
   // jQuery
   $.parseJSON(str);
 
-  // Native
+  // Natif
   JSON.parse(str);
   ```
 
-**[⬆ back to top](#table-of-contents)**
+**[⬆ remonter](#table-of-contents)**
 
-## Promises
+## Promesses
 
-A promise represents the eventual result of an asynchronous operation. jQuery has its own way to handle promises. Native JavaScript implements a thin and minimal API to handle promises according to the [Promises/A+](http://promises-aplus.github.io/promises-spec/) specification.
+Une promesse représente le résultat éventuel d'une opération asynchrone. jQuery a sa propre manière de traiter les promesses. JavaScript natif implémente une API minimale et légère afin de traiter les promesses en accord avec les spécifications [Promises/A+](http://promises-aplus.github.io/promises-spec/).
+
 
 - [7.1](#7.1) <a name='7.1'></a> done, fail, always
 
-  `done` is called when promise is resolved, `fail` is called when promise is rejected, `always` is called when promise is either resolved or rejected.
+  `done` est appelée quand une promesse est résolue, `fail` est appelée quand une promesse est rejetée et `always` est appelée quand une promesse n'est ni résolue ni rejetée.
 
   ```js
   // jQuery
   $promise.done(doneCallback).fail(failCallback).always(alwaysCallback)
 
-  // Native
+  // Natif
   promise.then(doneCallback, failCallback).then(alwaysCallback, alwaysCallback)
   ```
 
 - [7.2](#7.2) <a name='7.2'></a> when
 
-  `when` is used to handle multiple promises. It will resolve when all promises are resolved, and reject if either one is rejected.
+  `when` est utilisée pour traiter de multiples promesses. Elle sera résolue quand toutes les promesses le seront, and rejetée si au moins une est rejetée.
 
   ```js
   // jQuery
   $.when($promise1, $promise2).done((promise1Result, promise2Result) => {})
 
-  // Native
+  // Natif
   Promise.all([$promise1, $promise2]).then([promise1Result, promise2Result] => {});
   ```
 
 - [7.3](#7.3) <a name='7.3'></a> Deferred
 
-  Deferred is a way to create promises.
+  Deferred est un moyen de créer une promesse.
 
   ```js
   // jQuery
@@ -1072,7 +996,7 @@ A promise represents the eventual result of an asynchronous operation. jQuery ha
     return d.promise();
   }
 
-  // Native
+  // Natif
   function asyncFunc() {
     return new Promise((resolve, reject) => {
       setTimeout(function() {
@@ -1085,7 +1009,7 @@ A promise represents the eventual result of an asynchronous operation. jQuery ha
     });
   }
   
-  // Deferred way
+  // Avec deferred
   function defer() {
     let resolve, reject;
     let promise = new Promise(function() {
@@ -1107,7 +1031,7 @@ A promise represents the eventual result of an asynchronous operation. jQuery ha
   }
   ```
 
-**[⬆ back to top](#table-of-contents)**
+**[⬆ remonter](#table-of-contents)**
 
 ## Animation
 
@@ -1118,21 +1042,22 @@ A promise represents the eventual result of an asynchronous operation. jQuery ha
   $el.show();
   $el.hide();
 
-  // Native
-  // More detail about show method, please refer to https://github.com/oneuijs/oui-dom-utils/blob/master/src/index.js#L363
+  // Natif
+  //Pour plus de détails à propos de la méthode show, merci de se référer à https://github.com/oneuijs/oui-dom-utils/blob/master/src/index.js#L363
+
   el.style.display = ''|'inline'|'inline-block'|'inline-table'|'block';
   el.style.display = 'none';
   ```
 
 - [8.2](#8.2) <a name='8.2'></a> Toggle
 
-  Display or hide the element.
+  Affiche ou cache un élément.
 
   ```js
   // jQuery
   $el.toggle();
 
-  // Native
+  // Natif
   if (el.ownerDocument.defaultView.getComputedStyle(el, null).display === 'none') {
     el.style.display = ''|'inline'|'inline-block'|'inline-table'|'block';
   }
@@ -1148,7 +1073,7 @@ A promise represents the eventual result of an asynchronous operation. jQuery ha
   $el.fadeIn(3000);
   $el.fadeOut(3000);
 
-  // Native
+  // Natif
   el.style.transition = 'opacity 3s';
   // fadeIn
   el.style.opacity = '1';
@@ -1158,25 +1083,25 @@ A promise represents the eventual result of an asynchronous operation. jQuery ha
 
 - [8.4](#8.4) <a name='8.4'></a> FadeTo
 
-  Adjust the opacity of the element.
+  Ajuste l'opacité d'un élément.
 
   ```js
   // jQuery
   $el.fadeTo('slow',0.15);
-  // Native
-  el.style.transition = 'opacity 3s'; // assume 'slow' equals 3 seconds
+  // Natif
+  el.style.transition = 'opacity 3s'; // assume que 'slow' vaut 3 seconds
   el.style.opacity = '0.15';
   ```
 
 - [8.5](#8.5) <a name='8.5'></a> FadeToggle
 
-  Display or hide the element by animating their opacity.
+  Affiche ou cache un élément en animant son opacité.
 
   ```js
   // jQuery
   $el.fadeToggle();
 
-  // Native
+  // Natif
   el.style.transition = 'opacity 3s';
   let { opacity } = el.ownerDocument.defaultView.getComputedStyle(el, null);
   if (opacity === '1') {
@@ -1194,7 +1119,7 @@ A promise represents the eventual result of an asynchronous operation. jQuery ha
   $el.slideUp();
   $el.slideDown();
 
-  // Native
+  // Natif
   let originHeight = '100px';
   el.style.transition = 'height 3s';
   // slideUp
@@ -1205,13 +1130,13 @@ A promise represents the eventual result of an asynchronous operation. jQuery ha
 
 - [8.7](#8.7) <a name='8.7'></a> SlideToggle
 
-  Display or hide the element with a sliding motion.
+  Affiche ou cache un élément en le faisant glisser.
 
   ```js
   // jQuery
   $el.slideToggle();
 
-  // Native
+  // Natif
   let originHeight = '100px';
   el.style.transition = 'height 3s';
   let { height } = el.ownerDocument.defaultView.getComputedStyle(el, null);
@@ -1222,33 +1147,47 @@ A promise represents the eventual result of an asynchronous operation. jQuery ha
    el.style.height = '0px';
   }
   ```
-
+  
 - [8.8](#8.8) <a name='8.8'></a> Animate
 
-  Perform a custom animation of a set of CSS properties.
+  Réalise une animation personnaliée à partir d'une collection de propriétée CSS.
 
   ```js
   // jQuery
   $el.animate({params}, speed);
 
-  // Native
+  // Natif
   el.style.transition = 'all' + speed;
   Object.keys(params).forEach(function(key) {
     el.style[key] = params[key];
   })
   ```
-
+  
 ## Alternatives
 
-* [You Might Not Need jQuery](http://youmightnotneedjquery.com/) - Examples of how to do common event, element, ajax etc with plain javascript.
-* [npm-dom](http://github.com/npm-dom) and [webmodules](http://github.com/webmodules) - Organizations you can find individual DOM modules on NPM
+* [You Might Not Need jQuery](http://youmightnotneedjquery.com/) - Des exemples sur comment faire un simple évènement, ajax etc avec du javascript pur.
+* [npm-dom](http://github.com/npm-dom) et [webmodules](http://github.com/webmodules) - Modules DOM sur NPM.
 
-## Browser Support
+## Traductions
+
+* [한국어](./README.ko-KR.md)
+* [简体中文](./README.zh-CN.md)
+* [Bahasa Melayu](./README-my.md)
+* [Bahasa Indonesia](./README-id.md)
+* [Português(PT-BR)](./README.pt-BR.md)
+* [Tiếng Việt Nam](./README-vi.md)
+* [Español](./README-es.md)
+* [Русский](./README-ru.md)
+* [Türkçe](./README-tr.md)
+* [Italian](./README-it.md)
+* [Français](./README-fr.md)
+
+## Navigateurs compatibles
 
 ![Chrome](https://raw.github.com/alrra/browser-logos/master/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/firefox/firefox_48x48.png) | ![IE](https://raw.github.com/alrra/browser-logos/master/internet-explorer/internet-explorer_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/safari/safari_48x48.png)
 --- | --- | --- | --- | --- |
-Latest ✔ | Latest ✔ | 10+ ✔ | Latest ✔ | 6.1+ ✔ |
+Plus récente ✔ | Plus récente ✔ | 10+ ✔ | Plus récente ✔ | 6.1+ ✔ |
 
-# License
+# Licence
 
 MIT
